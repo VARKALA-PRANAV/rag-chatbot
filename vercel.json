@@ -7,20 +7,17 @@
     },
     {
       "src": "rag-frontend/package.json",
-      "use": "@vercel/static-build",
-      "config": {
-        "distDir": "dist"
-      }
+      "use": "@vercel/static-build"
     }
   ],
   "routes": [
     {
       "src": "/api/(.*)",
-      "dest": "/api/index.py"
+      "dest": "api/index.py"
     },
     {
       "src": "/(.*)",
-      "dest": "/rag-frontend/$1"
+      "dest": "rag-frontend/$1"
     }
   ]
 }
