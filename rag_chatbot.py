@@ -6,6 +6,7 @@ import os
 
 load_dotenv()
 
+
 # Load PDF
 loader = PyPDFLoader("data/india  history.pdf")
 docs = loader.load()
