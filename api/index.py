@@ -33,3 +33,4 @@ def chat(request: ChatRequest):
     return {
         "answer": answer
     }
+app = app
