@@ -107,11 +107,11 @@ const sendMessage = async () => {
 
   try {
     const response = await axios.post(
-        "/api/chat",
-      {
-        question: userMessage.content,
-      }
-    );
+  "https://election-situated-freeload.ngrok-free.dev/chat",
+  {
+    question: userMessage.content,
+  }
+);
 
     const botMessage = {
       role: "assistant",
