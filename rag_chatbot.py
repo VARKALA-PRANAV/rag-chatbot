@@ -1,5 +1,3 @@
-from langchain_community.document_loaders import PyPDFLoader
-from langchain_text_splitters import RecursiveCharacterTextSplitter
 from langchain_huggingface import HuggingFaceEmbeddings
 from langchain_chroma import Chroma
 import google.generativeai as genai
@@ -15,33 +13,20 @@ genai.configure(
 
 model = genai.GenerativeModel("gemini-2.5-flash")
 
-# Load PDF
-loader = PyPDFLoader("data/india  history.pdf")
-docs = loader.load()
-
-# Split text
-splitter = RecursiveCharacterTextSplitter(
-    chunk_size=500,
-    chunk_overlap=50
-)
-
-chunks = splitter.split_documents(docs)
-
-# Load embedding model
+# Load embeddings
 embeddings = HuggingFaceEmbeddings(
     model_name="sentence-transformers/all-MiniLM-L6-v2"
 )
 
-# Create vector store in memory (NO persist_directory)
-vector_store = Chroma.from_documents(
-    documents=chunks,
-    embedding=embeddings
+# Load existing database
+vector_store = Chroma(
+    persist_directory="./db",
+    embedding_function=embeddings
 )
 
 
 def ask_rag(query):
     try:
-        # Retrieve relevant chunks
         results = vector_store.similarity_search(
             query,
             k=3
@@ -72,17 +57,3 @@ Answer based only on the provided context.
             "⚠️ Error while generating response.\n\n"
             f"{str(e)}"
         )
-
-
-# Terminal testing
-if __name__ == "__main__":
-    while True:
-        query = input("Ask: ")
-
-        if query.lower() == "exit":
-            break
-
-        answer = ask_rag(query)
-
-        print("\nAnswer:\n")
-        print(answer)
